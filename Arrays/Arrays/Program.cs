@@ -19,10 +19,10 @@ namespace Arrays
             };
 
             Person person = new Person();
-            var youngest = person.FindYoungest(family);
+            ref var youngest = ref person.FindYoungest(family); //a reference to item in family array
 
             Console.WriteLine($"Ime najmladeg clana obitelji: {youngest._ime}, godine: {youngest._godine}");          
-            youngest._godine++; //incremnts youngest age by one(if using struct instead of class this won't work)
+            youngest._godine++; //now it updates youngest's age
 
             Console.WriteLine("Svi clanovi obitelji...");
             foreach (var familyMember in family)
@@ -34,23 +34,29 @@ namespace Arrays
         }
     }
 
-    public class Person
+    /// <summary>
+    /// structs are value types 
+    /// Structs are declared same way as classes, except they not accept default constructors
+    /// initialization(implicitly constructed by default)
+    /// </summary>
+    public struct Person
     {
         public string _ime;
         public int _godine;
 
-        public Person()
-        {
 
-        }
         public Person(string ime, int godine)
         {
             _ime = ime;
             _godine = godine;
         }
 
-        public Person FindYoungest(Person[] family)
-        {
+        /// <summary>
+        /// Return type of a method changes to ref Person(a reference to a Person) and 
+        /// return statement states it passes back a reference to the youngest item in family array
+        /// </summary>
+         public ref Person FindYoungest(Person[] family)
+         {
             int youngest = 0;
 
             for (int i = 1; i < family.Length; i++)
@@ -60,9 +66,9 @@ namespace Arrays
                     youngest = i;
                 }
             }
-            var result = family[youngest];
-            return result;
-        }
+
+            return ref family[youngest];  
+         }
 
     }
 }
